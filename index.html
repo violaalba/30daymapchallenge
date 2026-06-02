@@ -110,6 +110,33 @@ h2 {
     user-select: none;
 }
 
+#prev-btn,
+#next-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 60px;
+    cursor: pointer;
+    user-select: none;
+    padding: 10px 20px;
+    z-index: 1001;
+}
+
+#prev-btn {
+    left: 20px;
+}
+
+#next-btn {
+    right: 20px;
+}
+
+#prev-btn:hover,
+#next-btn:hover {
+    opacity: 0.7;
+}
+
+
 /* ---------- RESPONSIVE ---------- */
 
 @media (max-width: 1200px) {
@@ -218,6 +245,9 @@ const projects = {
 
 const content = document.getElementById("content");
 
+let currentYear = null;
+let currentIndex = null;
+
 for (const year of Object.keys(projects).sort((a,b) => b-a)) {
 
     const heading = document.createElement("h2");
@@ -254,6 +284,8 @@ for (const year of Object.keys(projects).sort((a,b) => b-a)) {
 
 
         card.addEventListener("click", () => {
+            currentYear = year;
+            currentIndex = projects[year].indexOf(project);
             openMedia(year, project);
         });
 
@@ -266,6 +298,19 @@ for (const year of Object.keys(projects).sort((a,b) => b-a)) {
 const lightbox = document.getElementById("lightbox");
 const lightboxContent = document.getElementById("lightbox-content");
 const closeBtn = document.getElementById("close-btn");
+const prevBtn = document.getElementById("prev-btn");
+const nextBtn = document.getElementById("next-btn");
+
+prevBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    showProject(-1);
+});
+
+nextBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    showProject(1);
+});
+
 
 function openMedia(year, project) {
 
@@ -295,6 +340,27 @@ function openMedia(year, project) {
     lightbox.style.display = "flex";
 }
 
+function showProject(offset) {
+
+    const yearProjects = projects[currentYear];
+
+    currentIndex += offset;
+
+    if (currentIndex < 0) {
+        currentIndex = yearProjects.length - 1;
+    }
+
+    if (currentIndex >= yearProjects.length) {
+        currentIndex = 0;
+    }
+
+    openMedia(
+        currentYear,
+        yearProjects[currentIndex]
+    );
+}
+
+
 function closeLightbox() {
 
     lightbox.style.display = "none";
@@ -312,8 +378,20 @@ lightbox.addEventListener("click", (event) => {
 
 document.addEventListener("keydown", (event) => {
 
+    if (lightbox.style.display !== "flex") {
+        return;
+    }
+
     if (event.key === "Escape") {
         closeLightbox();
+    }
+
+    if (event.key === "ArrowLeft") {
+        showProject(-1);
+    }
+
+    if (event.key === "ArrowRight") {
+        showProject(1);
     }
 });
 
