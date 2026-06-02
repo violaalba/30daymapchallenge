@@ -384,24 +384,29 @@ nextBtn.addEventListener("click", (e) => {
 
 function openMedia(year, project) {
 
-    lightboxContent.innerHTML = `
-    <img src="${year}/thumbnails/day${project.day}_sml.jpeg"
-         alt="${project.title}">
-    `;
-
-    const fullImg = new Image();
-    fullImg.src = `${year}/maps/day${project.day}.png`;
-
-    fullImg.onload = () => {
-    lightboxContent.innerHTML = `
-        <img src="${fullImg.src}" alt="${project.title}">
-    `;
-    };
-
     lightboxTitle.textContent =
         `Day ${project.day} — ${project.title}`;
 
-    let mediaPath;
+    const thumbPath =
+        `${year}/thumbnails/day${project.day}_sml.jpeg`;
+
+    const fullPath =
+        `${year}/maps/day${project.day}.png`;
+
+    lightboxContent.innerHTML = `
+        <img src="${thumbPath}" alt="${project.title}">
+    `;
+
+    lightbox.style.display = "flex";
+
+    const fullImg = new Image();
+    fullImg.src = fullPath;
+
+    fullImg.onload = () => {
+        lightboxContent.innerHTML = `
+            <img src="${fullImg.src}" alt="${project.title}">
+        `;
+    };
 
     if (project.type === "video") {
         mediaPath =
