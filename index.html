@@ -337,7 +337,7 @@ for (const year of Object.keys(projects).sort((a,b) => b-a)) {
         card.innerHTML = `
             <div class="image-container">
                 <img src="${thumbPath}"
-                     alt="${project.title}">
+                     alt="${project.title}" loading="lazy">
             </div>
         
             <div class="card-title">
@@ -383,6 +383,20 @@ nextBtn.addEventListener("click", (e) => {
 
 
 function openMedia(year, project) {
+
+    lightboxContent.innerHTML = `
+    <img src="${year}/thumbnails/day${project.day}_sml.jpeg"
+         alt="${project.title}">
+    `;
+
+    const fullImg = new Image();
+    fullImg.src = `${year}/maps/day${project.day}.png`;
+
+    fullImg.onload = () => {
+    lightboxContent.innerHTML = `
+        <img src="${fullImg.src}" alt="${project.title}">
+    `;
+    };
 
     lightboxTitle.textContent =
         `Day ${project.day} — ${project.title}`;
