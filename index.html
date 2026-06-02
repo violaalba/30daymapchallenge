@@ -387,29 +387,9 @@ function openMedia(year, project) {
     lightboxTitle.textContent =
         `Day ${project.day} — ${project.title}`;
 
-    const thumbPath =
-        `${year}/thumbnails/day${project.day}_sml.jpeg`;
-
-    const fullPath =
-        `${year}/maps/day${project.day}.png`;
-
-    lightboxContent.innerHTML = `
-        <img src="${thumbPath}" alt="${project.title}">
-    `;
-
-    lightbox.style.display = "flex";
-
-    const fullImg = new Image();
-    fullImg.src = fullPath;
-
-    fullImg.onload = () => {
-        lightboxContent.innerHTML = `
-            <img src="${fullImg.src}" alt="${project.title}">
-        `;
-    };
-
     if (project.type === "video") {
-        mediaPath =
+
+        const mediaPath =
             `${year}/maps/day${project.day}.mp4`;
 
         lightboxContent.innerHTML = `
@@ -418,15 +398,31 @@ function openMedia(year, project) {
             </video>
         `;
     }
+
     else {
 
-        mediaPath =
+        const thumbPath =
+            `${year}/thumbnails/day${project.day}_sml.jpeg`;
+
+        const fullPath =
             `${year}/maps/day${project.day}.png`;
 
+        // Сразу показываем превью
         lightboxContent.innerHTML = `
-            <img src="${mediaPath}"
+            <img src="${thumbPath}"
                  alt="${project.title}">
         `;
+
+        // Загружаем большую картинку
+        const fullImg = new Image();
+        fullImg.src = fullPath;
+
+        fullImg.onload = () => {
+            lightboxContent.innerHTML = `
+                <img src="${fullImg.src}"
+                     alt="${project.title}">
+            `;
+        };
     }
 
     lightbox.style.display = "flex";
