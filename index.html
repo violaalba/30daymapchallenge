@@ -130,7 +130,7 @@ h2 {
 
 #lightbox-content {
     max-width: 95vw;
-    max-height: calc-size(95vh - 80px);
+    max-height: 85vh;
 }
 
 #lightbox img,
@@ -418,13 +418,11 @@ function openMedia(year, project) {
         const fullPath =
             `${year}/maps/day${project.day}.png`;
 
-        // Сразу показываем превью
         lightboxContent.innerHTML = `
             <img src="${thumbPath}"
                  alt="${project.title}">
         `;
 
-        // Загружаем большую картинку
         const fullImg = new Image();
         fullImg.src = fullPath;
 
